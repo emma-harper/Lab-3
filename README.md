@@ -47,7 +47,7 @@
                               					; TExaS_Init sets bus clock at 80 MHz
      BL  TExaS_Init          					; voltmeter, scope on PD3 ; Initialization goes here
 	LDR R1,=SYSCTL_RCGCGPIO_R				; R1 <- Address of SYSCTL	
-	LDR R0, [R1]
+	LDRB R0, [R1]
 	ORR R0, #0x30						; Friendly mask that will turn on Ports E and F
 	STR R0,[R1]					      	; R0 -> Mem[SYSCTL] 
 	
@@ -69,9 +69,9 @@
 	STR R0,[R2]						; storing PORT E PINS Data at PORT E DEN
 	STR R1,[R3]						; storing PORT F PINS Data at PORT F DEN
 	
-	LDR R0, =GPIO_PORTF_PUR_R
-	LDR R1, [R0]
-	ORR R1, #0X10
+	LDR R0, =GPIO_PORTF_PUR_R				; Use Pull up register for PF4
+	LDRB R1, [R0]						; Negative logic on button
+	ORR R1, #0X10						; Friendly mask for PF4
 	STR R1, [R0]
 	
      CPSIE  I   				 		; TExaS voltmeter, scope runs on interrupts
@@ -91,8 +91,8 @@
 	
 	LDR R0,=GPIO_PORTE_DATA_R  				;get Port E Data 
 	LDRB R1,[R0]					   	;get contents of the PORT E
-	MOV R2,#0x08				           	; make a mask for PE3
-	ORR R1,R2					        ;Isolate PE3 in PORT E DATA
+						           	; make a mask for PE3
+	ORR R1, #0x08					        ;Isolate PE3 in PORT E DATA
 	STR R1,[R0]					        ;SET PE3 Bit
 	BL hold		                  			;stall
 	EOR R1,#0x08					        ;invert bit
