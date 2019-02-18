@@ -28,18 +28,18 @@
        EXPORT  Start
 		   
 
-	tonn 	DCD 2412000					; initial time on  30%
-	tof  	DCD 5628000					; initial time off 70% TOTAL RUN:8,040,000	
-	incr 	DCD 1608000					; actual calculated is 160800
+	tonn 	DCD 3000000					; initial time on  30%
+	tof  	DCD 7000000					; initial time off 70% TOTAL RUN:8,040,000	
+	incr 	DCD 2000000					; actual calculated is 160800
 
-	min		DCD 804000				; 10%
-	max		DCD 7236000				; 90%
+	min		DCD 1000000				; 10%
+	max		DCD 9000000				; 90%
 
 								;breathing
-	bron	DCD 8040					
-	broff	DCD 152760
-	bncr	DCD 8040
-	total 	DCD 160800
+	bron	DCD 10000					
+	broff	DCD 190000
+	bncr	DCD 10000
+	total 	DCD 200000
 	
 	Start
 	
@@ -75,9 +75,6 @@
 	STR R1, [R0]
 	
      CPSIE  I   				 		; TExaS voltmeter, scope runs on interrupts
-	 
-	 
-	 
 	 
 	LDR R8,tonn
 	LDR R9,tof 
@@ -225,15 +222,7 @@
 		STR R1,[R0]					;SET PE3 Bit
 		BX LR
 
-	datshit	LDR R0,=GPIO_PORTF_DATA_R		 
-		LDR R1,[R0]
-		MOV R2,#0x10
-		AND R1,R2					;CHECK JUST TO MAKE SURE
-		CMP R1,#0
-		BEQ loop
-		BX LR
-		
-	turnofftwo 
+	turnofftwo 			;needed in order to branch back to loop instead of LR
 		LDR R0,=GPIO_PORTE_DATA_R  			;get Port E Data 
 		LDR R1,[R0]					;get contents of the PORT E
 		MOV R2,#0x08					; make a mask for PE3
